@@ -8,19 +8,31 @@ def load_students():
 # Retrieve students data based on user query
 def retrieve_students(query,students):
     results = []
-    if "top" in query:
-        top_student = students[0]
-        for s in students:
-            if s["marks"] > top_student["marks"]:
-                top_student = s
-        results.append(top_student)
-    
-    for student in students:
-        if "above" in query and student["marks"] > 80:
-            results.append(student)
-        elif "below" in query and student["marks"] < 70:
-            results.append(student)
+    query = query.lower()
 
+    #extract number from query
+    num = None
+    for word in query.split():
+        if word.isdigit():
+            num = int(word)
+        
+    #above case
+    if "above" in query and num is not None:
+        for student in students:
+            if student["marks"] > num:
+                results.append(student)
+    #below case
+    elif "below" in query and num is not None:
+        for student in students:
+            if student["marks"] < num:
+                results.append(student)
+    #top case
+    elif "top" in query:
+        top_student = students[0]
+        for student in students:
+            if student["marks"] > top_student["marks"]:
+                top_student = student
+        results.append(top_student)
     return results
 
 
